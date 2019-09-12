@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="./stylesheets/forms">
+<div class="form">
+  <%= form_with(model: item, local: true) do |form| %>
+  <% if item.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+    <ul>
+      <% item.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.hidden_field :user_id, value: current_user.id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :item_category_id %>
+    <%= collection_select(:item, :item_category_id, ItemCategory.all, :id, :name, prompt: true) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :description %>
+    <%= form.text_field :description %>
+  </div>
+
+  <div class="field">
+    <%= form.label :measurement_id %>
+    <%= collection_select(:item, :measurement_id, Measurement.all, :id, :unit, prompt: true) %>
+  </div>
+
+  <div class="field">
+    <%= form.label :quantity %>
+    <%= form.text_field :quantity %>
+  </div>
+
+  <div class="field">
+    <%= form.label :price %>
+    <%= form.text_field :price %>
+  </div>
+
+  <div class="field">
+    <%= form.label :image %>
+    <%= form.file_field :image %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+  <% end %>
+
+</div>

@@ -1,0 +1,88 @@
+<div class="welcome">
+  <link rel="stylesheet" href="./stylesheets/welcome">
+  <div class="booke-image">
+    <div id="searchbar-container">
+    </div>
+    <div id="searchbar">
+      <form action="/items/search" method="get">
+        <script>
+          function initialize() {
+
+            var options = {
+              types: ['(cities)'],
+              componentRestrictions: {
+                country: "au"
+              }
+            };
+
+            var input = document.getElementById('location_field');
+            var autocomplete = new google.maps.places.Autocomplete(input, options);
+          }
+          google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+        <%= collection_select(:item, :item_category_id, ItemCategory.all, :id, :name, :prompt => "All Categories") %>
+        <%= text_field_tag :item_name, nil, placeholder: "Enter item name", name: "item_name" %>
+        <%= text_field_tag :location_field, nil , placeholder: "Enter a location" , autocomplete: "on" %>
+        <button type="submit">
+          <%= image_tag("searchicon.png",:alt=> "search-icon") %>
+        </button>
+      </form>
+    </div>
+  </div>
+  <div id="featured-items">
+    <ul id="filter-list">
+      <li><%= link_to "Fresh", "/items/fresh" %></li>
+      <% if user_signed_in? && current_user.watchlist == nil %>
+        <li><%= link_to "Watchlist", "/watchlists" ,action: "create", method: :post %></li>
+      <% elsif user_signed_in?  %>
+        <li><%= link_to "My listing", "/items/my_items" %></li>
+        <li><%= link_to "Watchlist", "/watchlists/#{current_user.watchlist.id}" %></li>
+      <% else %>
+        <li><%= link_to "My listing", "/users/sign_in" %></li>
+        <li><%= link_to "Watchlist", "/users/sign_in" %></li>
+      <% end %>
+    </ul>
+    <%= render :partial => "layouts/shared/grid_item" ,locals: {results: @results} %>
+  </div>
+  <div id="featured-categories">
+    <p>Categories</p>
+    <div id="categories-grid">
+      <div class="category">
+        <a href="/items/search?item%5Bitem_category_id%5D=1&item_name=&location_field=">
+          <%= image_tag("https://home-grown-local-chris-suki-selly-rails.s3-ap-southeast-2.amazonaws.com/fruits.png", :alt => "category-image") %>
+          <p>Fruits</p>
+        </a>
+      </div>
+      <div class="category">
+        <a href="/items/search?item%5Bitem_category_id%5D=2&item_name=&location_field=">
+          <%= image_tag("https://home-grown-local-chris-suki-selly-rails.s3-ap-southeast-2.amazonaws.com/vegs.png", :alt => "category-image") %>
+          <p>Vegs</p>
+        </a>
+      </div>
+      <div class="category">
+        <a href="/items/search?item%5Bitem_category_id%5D=3&item_name=&location_field=">
+          <%= image_tag("https://home-grown-local-chris-suki-selly-rails.s3-ap-southeast-2.amazonaws.com/relishes2.jpg", :alt => "category-image") %>
+          <p>Relish</p>
+        </a>
+      </div>
+      <div class="category">
+        <a href="/items/search?item%5Bitem_category_id%5D=4&item_name=&location_field=">
+          <%= image_tag("https://home-grown-local-chris-suki-selly-rails.s3-ap-southeast-2.amazonaws.com/goods.png", :alt => "category-image") %>
+          <p>Home <br> Made <br> Goods</p>
+        </a>
+      </div>
+      <div class="category">
+        <a href="/items/search?item%5Bitem_category_id%5D=5&item_name=&location_field=">
+          <%= image_tag("https://home-grown-local-chris-suki-selly-rails.s3-ap-southeast-2.amazonaws.com/spices.png", :alt => "category-image") %>
+          <p>Herbs <br> & <br> Spices</p>
+        </a>
+      </div>
+      <div class="category">
+        <a href="/items/search?item%5Bitem_category_id%5D=6&item_name=&location_field=">
+          <%= image_tag("https://home-grown-local-chris-suki-selly-rails.s3-ap-southeast-2.amazonaws.com/dairy.png", :alt => "category-image") %>
+          <p>Eggs</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
